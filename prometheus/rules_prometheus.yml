@@ -1,0 +1,57 @@
+groups:
+ - name: Basic_rules
+   rules:
+
+# Trigger if any exporters job stops, the hosts itself may still work
+   - alert: InstanceDown
+     expr: up == 0
+     for: 1m
+     annotations:
+       summary: "Hosts are down / unreachable (instance {{ $labels.instance }})"
+
+
+# Exists for the whole purpose of telling me that the MON server is still running
+   - alert: InstanceUp
+     expr: up{hostname="MON-server-Prometheus", instance="localhost:9090", job="prometheus"} == 1
+     for: 1m
+     annotations:
+       summary: "Hosts are up (instance {{ $labels.instance }})"
+
+# Tells if an host has under 25% percent of RAM available
+   - alert: Host_Out_Of_RAM
+     expr: node_memory_MemAvailable / node_memory_MemTotal * 100 < 25
+     for: 5m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host out of memory (instance {{ $labels.instance }})"
+       description: "Node memory is filling up (< 25% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+# Tells if an host has under 50% percent of disk space available
+   - alert: Host_Out_Of_Disk_Space
+     expr: (node_filesystem_avail{mountpoint="/"}  * 100) / node_filesystem_size{mountpoint="/"} < 50
+     for: 1s
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host out of disk space (instance {{ $labels.instance }})"
+       description: "Disk is almost full (< 50% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+# Tells if an host use 80% of his total CPU power
+   - alert: Host_High_Cpu_Load
+     expr: (sum by (instance) (irate(node_cpu{job="node_exporter_metrics",mode="idle"}[5m]))) > 80
+     for: 5m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host high CPU load (instance {{ $labels.instance }})"
+       description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+- name: Services_Alert
+   rules:
+   # Trigger if the Apache service of an host configured is down is down
+   - alert: Apache
+     expr: node_systemd_unit_state{hostname="MON-server",name="apache2.service",state="active"}==0
+     for: 1m
+     annotations:
+       summary: "Apache2 is down on (instance {{ $labels.instance }})" 
