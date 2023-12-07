@@ -34,7 +34,7 @@ scrape_configs:
   - job_name: "Alertmanager"
 
     static_configs:
-      - targets: ["localhost:9093"]
+      - targets: ["localhost:9100"]
         labels:
           hostnam: "MON-server-Alertmanager"
 
