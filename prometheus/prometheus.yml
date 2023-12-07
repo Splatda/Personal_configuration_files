@@ -31,9 +31,16 @@ scrape_configs:
           hostname: "MON-server-Prometheus"
           
 
-  - job_name: "alertmanager"
+  - job_name: "Alertmanager"
 
     static_configs:
       - targets: ["localhost:9093"]
         labels:
-          hostname: "MON-server-Alertmanager"
+          hostnam: "MON-server-Alertmanager"
+
+  - job_name: "Node_exporter"
+
+    static_configs:
+      - targets: ["localhost:9093"]
+        labels:
+          hostname: "MON-server-Node_exporter"
