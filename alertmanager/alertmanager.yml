@@ -4,21 +4,30 @@ route:
   group_interval: 10s
   repeat_interval: 1d
   receiver: 'email'
+
 receivers:
+
+
   - name: 'web.hook'
     webhook_configs:
       - url: 'http://127.0.0.1:5001/'
 
-
+#Configuration to send alerts through emails
   - name: "email"
     email_configs:
-    - to: "timothee.ligniere@gmail.com"
-      from: "alertmanager.tl@gmail.com"
+    - to: "<Mail receiver>"
+      from: "<Alertmanager mail>"
       smarthost: smtp.gmail.com:587
-      auth_username: "alertmanager.tl@gmail.com"
-      auth_identity: "alertmanager.tl@gmail.com"
-      auth_password: "bradomhlgstsqxgo"
+      auth_username: "<Alertmanager mail>"
+      auth_identity: "<Alertmanager mail>"
+      auth_password: "<Google token for applications>"
       send_resolved: True
+      
+#Configuration to send alerts on a chat on Discord      
+  - name: "discord"
+    discord_config:
+      webhook_url: "<Url to your discord webhook>"
+      
 inhibit_rules:
   - source_match:
       severity: 'critical'
