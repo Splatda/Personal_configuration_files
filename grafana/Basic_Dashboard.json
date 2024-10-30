@@ -104,7 +104,6 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "expr": "100 - ((node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\"} * 100) / node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\"})",
@@ -199,7 +198,6 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "expr": "(1 - avg(irate(node_cpu_seconds_total{mode=\"idle\"}[1m])) by (hostname)) * 100",
@@ -215,7 +213,6 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
